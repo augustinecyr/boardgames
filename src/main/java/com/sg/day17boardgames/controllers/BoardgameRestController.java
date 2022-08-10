@@ -17,7 +17,6 @@ import com.sg.day17boardgames.services.BoardgameService;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 
 @RestController
 @RequestMapping(path = "/boardgame", produces = MediaType.APPLICATION_JSON_VALUE)
