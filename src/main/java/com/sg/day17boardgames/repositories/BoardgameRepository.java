@@ -1,6 +1,9 @@
 package com.sg.day17boardgames.repositories;
 
-import java.util.Optional;
+import java.util.LinkedList;
+import java.util.List;
+
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,12 +18,23 @@ public class BoardgameRepository {
     @Qualifier("redislab")
     private RedisTemplate<String, String> redisTemplate;
 
-    public Optional<String> get(String id) {
-        ValueOperations<String, String> valueOp = redisTemplate.opsForValue();
-        String value = valueOp.get(id);
-        
-        if (null == value)
-            return Optional.empty(); // empty box
-        return Optional.of(value); // box with data
+    public Integer count() {
+        Set<String> keys = redisTemplate.keys("[0-9]*");
+        return keys.size();
+    }
+
+    public List<String> keys() {
+        Set<String> keys = redisTemplate.keys("[0-9]*");
+        List<String> result = new LinkedList<>(keys);
+        return result.stream()
+                .map(v -> Integer.parseInt(v))
+                .sorted()
+                .map(v -> v.toString())
+                .toList();
+    }
+
+    public String get(String id) {
+        ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
+        return valueOps.get(id);
     }
 }
